@@ -40,7 +40,7 @@ E = -R / (L0 + L1 * exp(-alpha * (delta - x1)))
 F = 1 / (L0 + L1 * exp(-alpha * (delta - x1)))
 G = C*F/(A*E - A*s + B*E*s - B*s**2 - E*s**2 + s**3)
 tf = remove_imaginary()
-
+print(f'Transfer Function: G = {tf}')
 
 ###Sumulations###
 
