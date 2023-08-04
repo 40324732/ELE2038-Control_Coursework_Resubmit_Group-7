@@ -5,18 +5,6 @@ import sympy as sym
 
 ###Transfer Function Calculation
 
-
-def remove_imaginary():
-    if str(N(G)).__contains__('*I'):
-        tf = str(N(G)).replace('*I', '')
-    else:
-        tf = str(N(G))
-    return tf
-
-
-G, F, C, s, A, B, E = sym.symbols('G F C s A B E')
-G = (F * C) / expand(((s ** 2 - A - B * s) * (s - E)))
-print(f'G = {G}')
 m = 0.462
 g = 9.81
 d = 0.42
@@ -30,6 +18,20 @@ k = 1885
 b = 10.4
 phi = 41
 x1 = 0.4
+
+
+def remove_imaginary():
+    if str(N(G)).__contains__('*I'):
+        tf = str(N(G)).replace('*I', '')
+    else:
+        tf = str(N(G))
+    return tf
+
+
+G, s, A, B, C, D, E, F = sym.symbols('G s A B C D E F')
+G = (F * C) / expand(((s ** 2 - A - B * s) * (s - E)))
+print(f'G = {G}')
+
 x3 = sqrt((k * x1 - k * d - m * g * sin(phi)) * (delta - x1) ** 2 / c)
 A = 5 * (2 * c * x3 ** 2 / (delta - x1) ** 3 - k) / (7 * m)
 B = -5 * b / (7 * m)
@@ -53,19 +55,17 @@ plt.xlabel("Time (s)")
 plt.ylabel("Distance (m)")
 plt.show()
 
-s = control.TransferFunction.s
-t_imp, x_imp = control.step_response(G)
+t_stp, x_stp = control.step_response(G)
 plt.grid()
-plt.plot(t_imp, x_imp)
+plt.plot(t_stp, x_stp)
 plt.title('Step Response Plot')
 plt.xlabel("Time (s)")
 plt.ylabel("Distance (m)")
 plt.show()
 
-Kp = 1135
-Kd = 22.5
+Kp = 1200
+Kd = 20
 Ki = 0
-
 
 controller = Kp + Ki/s + Kd*s
 Gfin = control.feedback(G, controller)
@@ -77,7 +77,7 @@ plt.plot(t_imp1, g_imp1*1000)
 plt.grid()
 plt.title('PID controller with both step and impulse')
 plt.legend(['Impulse Respnse', 'Step Response'])
-plt.xlabel("Time /s")
-plt.ylabel("Distance /mm")
+plt.xlabel("Time (s)")
+plt.ylabel("Distance (mm)")
 plt.show()
 
